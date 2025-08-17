@@ -1,25 +1,15 @@
-// JDBC Project: Hospital Patient Records (CRUD Operations)
-
 import java.sql.*;
 import java.util.Scanner;
-
 public class HospitalPatientRecords {
     static final String DB_URL = "jdbc:mysql://localhost:3306/hospitaldb";
     static final String USER = "root";
     static final String PASS = "Pratik@2006";
-
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-
         try {
-            // ✅ Load MySQL JDBC Driver first
             Class.forName("com.mysql.cj.jdbc.Driver");
-
-            // ✅ Now establish connection
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             System.out.println("✅ Connected to database.");
-
-            // Create table if not exists
             String createTable = "CREATE TABLE IF NOT EXISTS patients (" +
                     "patient_id INT PRIMARY KEY, " +
                     "name VARCHAR(50), " +
@@ -27,11 +17,9 @@ public class HospitalPatientRecords {
                     "gender VARCHAR(10), " +
                     "diagnosis VARCHAR(100), " +
                     "admission_date DATE)";
-
             try (Statement stmt = conn.createStatement()) {
                 stmt.execute(createTable);
             }
-
             int choice;
             do {
                 System.out.println("\n--- Hospital Patient Records ---");
@@ -42,7 +30,6 @@ public class HospitalPatientRecords {
                 System.out.println("5. Exit");
                 System.out.print("Enter your choice: ");
                 choice = sc.nextInt();
-
                 switch (choice) {
                     case 1 -> insertPatient(conn, sc);
                     case 2 -> viewPatient(conn, sc);
@@ -52,16 +39,13 @@ public class HospitalPatientRecords {
                     default -> System.out.println("Invalid choice. Try again.");
                 }
             } while (choice != 5);
-
-            conn.close(); // ✅ Close connection
-
+            conn.close(); 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             sc.close();
         }
     }
-
     private static void insertPatient(Connection conn, Scanner sc) throws SQLException {
         System.out.print("Enter Patient ID: ");
         int id = sc.nextInt();
